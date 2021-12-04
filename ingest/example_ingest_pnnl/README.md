@@ -2,7 +2,7 @@
 
 This is an example ingest meant to demonstrate how one might set up an ingestion pipeline using this template repository. It should be deleted before this repository or any of its ingests are used in a production environment.
 
-Writen by [Maxwell Levin](mailto:maxwell.levin@pnnl.gov)
+Written by [Maxwell Levin](mailto:maxwell.levin@pnnl.gov)
 
 ## Ingest Organization
 

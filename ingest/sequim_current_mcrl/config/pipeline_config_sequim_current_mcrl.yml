@@ -1,0 +1,166 @@
+# TODO – Developer: Fill out this file. You can find the official documentation at
+# https://github.com/tsdat/tsdat/blob/main/examples/templates/ingest_pipeline_template.yml
+# or open an existing example in this repository to see what you can do here. Note that
+# the some projects may use slightly different metadata conventions and requirements
+# than tsdat.
+
+pipeline:
+  type: Ingest
+
+  # These parameters will be used to name files.
+  location_id: "mcrl"
+  dataset_name: "water_velocity"
+  # qualifier: ""
+  # temporal: ""
+  data_level: "b1" # If not applying QC this should be set to "a1"
+
+dataset_definition:
+  attributes:
+    title: "Sequim Bay Inlet Current"
+    description: "Velocity data from ADCP deployed on a lander in the inlet to Sequim Bay"
+    conventions: MHKiT-Cloud Data Standards v. 1.0
+    institution: Pacific Northwest National Laboratory
+    code_url: https://github.com/tsdat/ingest-template
+    location_meaning: "MCRL"
+
+  dimensions:
+    time:
+      length: unlimited
+    range:
+      length: unlimited
+    dir:
+      length: unlimited
+
+  variables:
+    time:
+      input:
+        name: time
+        converter:
+          classname: "tsdat.utils.converters.TimestampTimeConverter"
+          parameters:
+            timezone: "US/Pacific"
+            unit: "s"
+      dims: [time]
+      type: float
+      attrs:
+        long_name: Time (UTC) # automatically converts this without tz based on local computer
+        units: "seconds since 1970-01-01T00:00:00"
+    range:
+      input:
+        name: range
+      dims: [range]
+      type: double
+    dir:
+      input:
+        name: dir
+      dims: [dir]
+      type: str
+
+    vel:
+      input:
+        name: vel
+      dims: [dir, range, time]
+      type: double
+
+    U_mag:
+      input:
+        name: U_mag
+      dims: [range, time]
+      type: double
+
+    U_dir:
+      input:
+        name: U_dir
+      dims: [range, time]
+      type: double
+
+    amplitude:
+      input:
+        name: amp
+      dims: [dir, range, time]
+      type: double
+
+    correlation:
+      input:
+        name: corr
+      dims: [dir, range, time]
+      type: double
+
+    temperature:
+      input:
+        name: temp
+      dims: [time]
+      type: double
+
+    depth:
+      input:
+        name: depth
+      dims: [time]
+      type: double
+
+    heading:
+      input:
+        name: heading
+      dims: [time]
+      type: double
+
+    pitch:
+      input:
+        name: pitch
+      dims: [time]
+      type: double
+
+    roll:
+      input:
+        name: roll
+      dims: [time]
+      type: double
+
+    c_sound:
+      input:
+        name: c_sound
+      dims: [time]
+      type: double
+
+    pressure:
+      input:
+        name: pressure
+      dims: [time]
+      type: double
+
+#-----------------------------------------------------------------
+quality_management:
+  #---------------------------------------------------------------
+  manage_missing_coordinates:
+    checker:
+      classname: tsdat.qc.checkers.CheckMissing
+    handlers:
+      - classname: tsdat.qc.handlers.FailPipeline
+    variables:
+      - COORDS
+
+  manage_coordinate_monotonicity:
+    checker:
+      classname: tsdat.qc.checkers.CheckMonotonic
+    handlers:
+      - classname: tsdat.qc.handlers.SortDatasetByCoordinate
+        parameters:
+          ascending: True
+          correction: "Coordinate data was sorted in order to ensure monotonicity."
+    variables:
+      - COORDS
+
+  #---------------------------------------------------------------
+  manage_missing_values:
+    checker:
+      classname: tsdat.qc.checkers.CheckMissing
+    handlers:
+      - classname: tsdat.qc.handlers.RemoveFailedValues
+      - classname: tsdat.qc.handlers.RecordQualityResults
+        parameters:
+          bit: 1
+          assessment: Bad
+          meaning: "Value is equal to _FillValue or NaN"
+    variables:
+      - DATA_VARS
+    exclude: [latitude, longitude, altitude]
