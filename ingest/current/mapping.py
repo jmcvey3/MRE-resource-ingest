@@ -15,24 +15,16 @@ mapping: Dict["AnyStr@compile", IngestSpec] = {
     # Mapping for Raw Data -> Ingest
     re.compile(r"Sig\d{4}_tidal.ad2cp"): IngestSpec(
         pipeline=Pipeline,
-        pipeline_config=expand(
-            "config/pipeline_config_sequim_current_mcrl.yml", __file__
-        ),
-        storage_config=expand(
-            "config/storage_config_sequim_current_mcrl.yml", __file__
-        ),
-        name="sequim_current_mcrl",
+        pipeline_config=expand("config/pipeline_config_current.yml", __file__),
+        storage_config=expand("config/storage_config_current.yml", __file__),
+        name="current",
     ),
     # Mapping for Processed Data -> Ingest (so we can reprocess plots)
     re.compile(r"Sig\d{4}_tidal.ad2cp"): IngestSpec(
         pipeline=Pipeline,
-        pipeline_config=expand(
-            "config/pipeline_config_sequim_current_mcrl.yml", __file__
-        ),
-        storage_config=expand(
-            "config/storage_config_sequim_current_mcrl.yml", __file__
-        ),
-        name="plot_sequim_current_mcrl",
+        pipeline_config=expand("config/pipeline_config_current.yml", __file__),
+        storage_config=expand("config/storage_config_current.yml", __file__),
+        name="plot_current",
     ),
     # You can add as many {regex: IngestSpec} entries as you would like. This is useful
     # if you would like to reuse this ingest at other locations or possibly for other

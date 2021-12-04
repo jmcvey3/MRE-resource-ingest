@@ -12,25 +12,25 @@ storage:
     input:
       wpr:
         file_pattern: ".*.wpr"
-        classname: ingest.sequim_current_mcrl.pipeline.filehandler.DolfynFileHandler
+        classname: ingest.current.pipeline.filehandler.DolfynFileHandler
       vec:
         file_pattern: ".*.VEC"
-        classname: ingest.sequim_current_mcrl.pipeline.filehandler.DolfynFileHandler
+        classname: ingest.current.pipeline.filehandler.DolfynFileHandler
       ad2cp:
         file_pattern: ".*.ad2cp"
-        classname: ingest.sequim_current_mcrl.pipeline.filehandler.DolfynFileHandler
+        classname: ingest.current.pipeline.filehandler.DolfynFileHandler
       #000: # An unfortunate naming choice
       #  file_pattern: '.*.000'
-      #  classname: ingest.sequim_current_mcrl.pipeline.filehandler.DolfynFileHandler
+      #  classname: ingest.current.pipeline.filehandler.DolfynFileHandler
       PD0:
         file_pattern: ".*.PD0"
-        classname: ingest.sequim_current_mcrl.pipeline.filehandler.DolfynFileHandler
+        classname: ingest.current.pipeline.filehandler.DolfynFileHandler
       enr:
         file_pattern: ".*.ENR"
-        classname: ingest.sequim_current_mcrl.pipeline.filehandler.DolfynFileHandler
+        classname: ingest.current.pipeline.filehandler.DolfynFileHandler
       enx:
         file_pattern: ".*.ENX"
-        classname: ingest.sequim_current_mcrl.pipeline.filehandler.DolfynFileHandler
+        classname: ingest.current.pipeline.filehandler.DolfynFileHandler
 
     # The output section should not be modified unless there is a strong need. Please
     # contact the repository maintainers if you feel you need to write to a different
