@@ -10,10 +10,6 @@ from tsdat import DSUtil
 from utils import IngestPipeline, format_time_xticks
 
 
-# TODO – Developer: Use hooks to add custom functionality to the pipeline including
-# plots, as applicable. Remove any unused code.
-
-
 class Pipeline(IngestPipeline):
     """--------------------------------------------------------------------------------
     SEQUIM_CURRENT INGESTION PIPELINE
@@ -178,7 +174,7 @@ class Pipeline(IngestPipeline):
                 ax[beam].set_xlabel("Time (UTC)")
                 ax[beam].set_ylabel(r"Range [m]")
                 ax[beam].set_ylim([0, 11])
-                add_colorbar(ax[beam], amp, "Ampliude")
+                add_colorbar(ax[beam], amp, "Ampliude [dB]")
 
             # Save the figure
             fig.savefig(tmp_path, dpi=100)
@@ -205,7 +201,7 @@ class Pipeline(IngestPipeline):
                 ax[beam].set_xlabel("Time (UTC)")
                 ax[beam].set_ylabel(r"Range [m]")
                 ax[beam].set_ylim([0, 11])
-                add_colorbar(ax[beam], amp, "Correlation")
+                add_colorbar(ax[beam], amp, "Correlation [%]")
 
             # Save the figure
             fig.savefig(tmp_path, dpi=100)

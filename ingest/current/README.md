@@ -1,4 +1,4 @@
-# sequim_current at MCRL
+# Water Current at MCRL
 
 Velocity data from ADCP deployed on a lander in the inlet to Sequim Bay
 

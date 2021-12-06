@@ -5,15 +5,12 @@ from utils import IngestSpec, expand
 from . import Pipeline
 
 
-# TODO – Developer: Update the regex patterns to match files that should trigger your
-# ingest pipeline.
-
 # See https://regex101.com for information on setting up a regex pattern. Note that the
 # full filepath will be passed to the compiled regex pattern, so you can optionally
 # match the directory structure in addition to (or instead of) the file basename.
 mapping: Dict["AnyStr@compile", IngestSpec] = {
     # Mapping for Raw Data -> Ingest
-    re.compile(r"Sig\d{4}_tidal.ad2cp"): IngestSpec(
+    re.compile(r"Sig\d{5}_tidal.ad2cp"): IngestSpec(
         pipeline=Pipeline,
         pipeline_config=expand("config/pipeline_config_current.yml", __file__),
         storage_config=expand("config/storage_config_current.yml", __file__),

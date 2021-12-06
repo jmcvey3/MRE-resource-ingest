@@ -131,24 +131,24 @@ dataset_definition:
 #-----------------------------------------------------------------
 quality_management:
   #---------------------------------------------------------------
-  manage_missing_coordinates:
-    checker:
-      classname: tsdat.qc.checkers.CheckMissing
-    handlers:
-      - classname: tsdat.qc.handlers.FailPipeline
-    variables:
-      - COORDS
+  # manage_missing_coordinates:
+  #   checker:
+  #     classname: tsdat.qc.checkers.CheckMissing
+  #   handlers:
+  #     - classname: tsdat.qc.handlers.FailPipeline
+  #   variables:
+  #     - COORDS
 
-  manage_coordinate_monotonicity:
-    checker:
-      classname: tsdat.qc.checkers.CheckMonotonic
-    handlers:
-      - classname: tsdat.qc.handlers.SortDatasetByCoordinate
-        parameters:
-          ascending: True
-          correction: "Coordinate data was sorted in order to ensure monotonicity."
-    variables:
-      - COORDS
+  # manage_coordinate_monotonicity:
+  #   checker:
+  #     classname: tsdat.qc.checkers.CheckMonotonic
+  #   handlers:
+  #     - classname: tsdat.qc.handlers.SortDatasetByCoordinate
+  #       parameters:
+  #         ascending: True
+  #         correction: "Coordinate data was sorted in order to ensure monotonicity."
+  #   variables:
+  #     - COORDS
 
   #---------------------------------------------------------------
   manage_missing_values:

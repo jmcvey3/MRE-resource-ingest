@@ -6,7 +6,6 @@ from ingest.sequim_current_mcrl import Pipeline
 parent = os.path.dirname(__file__)
 
 
-# TODO – Developer: Update paths to your input files here. Please add tests if needed.
 def test_sequim_current_mcrl_pipeline():
     set_env()
     pipeline = Pipeline(
