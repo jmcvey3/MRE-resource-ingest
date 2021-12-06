@@ -1,0 +1,145 @@
+# https://github.com/tsdat/tsdat/blob/main/examples/templates/ingest_pipeline_template.yml
+# or open an existing example in this repository to see what you can do here. Note that
+# the some projects may use slightly different metadata conventions and requirements
+# than tsdat.
+
+pipeline:
+  type: Ingest
+
+  # These parameters will be used to name files.
+  location_id: "mcrl"
+  dataset_name: "spotter_buoy"
+  # qualifier: ""
+  # temporal: ""
+  data_level: "b1" # If not applying QC this should be set to "a1"
+
+dataset_definition:
+  attributes:
+    title: "Spotter_Buoy"
+    description: "Wave data taken in Clallam Bay over a month-long deployment in Aug-Sep 2020"
+    conventions: MHKiT-Cloud Data Standards v. 1.0
+    institution: Pacific Northwest National Laboratory
+    code_url: https://github.com/tsdat/ingest-template
+    location_meaning: "MCRL"
+
+  dimensions:
+    time:
+      length: unlimited
+    dir:
+      length: 3
+
+  variables:
+    time:
+      input:
+        name: time
+        converter:
+          classname: "tsdat.utils.converters.TimestampTimeConverter"
+          parameters:
+            timezone: "US/Pacific"
+            unit: "s"
+      dims: [time]
+      type: float
+      attrs:
+        long_name: Time (UTC) # automatically converts this without tz based on local computer
+        standard_name: time
+        units: "seconds since 1970-01-01T00:00:00"
+    dir:
+      input:
+        name: dir
+      dims: [dir]
+      type: str
+      attrs:
+        comment: "Direction of motion"
+
+    displacement: # Name of variable in the output file
+      input:
+        name: displacement # Name of variable in the input file
+        units: "mm" # Units the input variable was measured in. Provide this if
+        # the output units are different and you want tsdat to do the
+        # conversion.
+      dims:
+        [dir, time] # List of coordinates that dimension this variable. `time` is
+        # a very common dimension, sometimes `height`, too.
+      type: float # The data type, typically one of: `float`, `long`, `int`
+      attrs:
+        long_name: buoy_displacement # Label used by Xarray and other libraries for plotting
+        comment: "Translation motion as measured by the buoy" # User-friendly description of the property.
+        units: "m"
+        valid_range: [-3, 3]
+#-----------------------------------------------------------------
+quality_management:
+  #---------------------------------------------------------------
+  # manage_missing_coordinates:
+  #   checker:
+  #     classname: tsdat.qc.checkers.CheckMissing
+  #   handlers:
+  #     - classname: tsdat.qc.handlers.FailPipeline
+  #   variables:
+  #     - COORDS
+
+  # manage_coordinate_monotonicity:
+  #   checker:
+  #     classname: tsdat.qc.checkers.CheckMonotonic
+  #   handlers:
+  #     - classname: tsdat.qc.handlers.SortDatasetByCoordinate
+  #       parameters:
+  #         ascending: True
+  #         correction: "Coordinate data was sorted in order to ensure monotonicity."
+  #   variables:
+  #     - COORDS
+
+  #---------------------------------------------------------------
+  # manage_missing_values:
+  #   checker:
+  #     classname: tsdat.qc.checkers.CheckMissing
+  #   handlers:
+  #     - classname: tsdat.qc.handlers.RemoveFailedValues
+  #     - classname: tsdat.qc.handlers.RecordQualityResults
+  #       parameters:
+  #         bit: 1
+  #         assessment: Bad
+  #         meaning: "Value is equal to _FillValue or NaN"
+  #   variables:
+  #     - DATA_VARS
+  #   exclude: []
+
+  despiking: # Rename this
+    checker:
+      classname: ingest.wave.pipeline.qc.GoringNikora2002
+      parameters:
+        n_points: 1000
+    handlers:
+      - classname: ingest.wave.pipeline.qc.CubicSplineInterp
+      - classname: tsdat.qc.handlers.RecordQualityResults
+        parameters:
+          bit: 4
+          assessment: Bad
+          meaning: "Spike"
+    variables:
+      - DATA_VARS
+
+  manage_min:
+    checker:
+      classname: tsdat.qc.checkers.CheckValidMin
+    handlers:
+      - classname: tsdat.qc.handlers.RemoveFailedValues
+      - classname: tsdat.qc.handlers.RecordQualityResults
+        parameters:
+          bit: 2
+          assessment: Bad
+          meaning: "Value is less than expected range"
+    variables:
+      - DATA_VARS
+
+  manage_max:
+    checker:
+      classname: tsdat.qc.checkers.CheckValidMax
+    handlers:
+      - classname: tsdat.qc.handlers.RemoveFailedValues
+      - classname: tsdat.qc.handlers.RecordQualityResults
+        parameters:
+          bit: 3
+          assessment: Bad
+          meaning: "Value is greater than expected range"
+    variables:
+      - DATA_VARS
