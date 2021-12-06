@@ -5,7 +5,6 @@ import dolfyn.adp.api as api
 from tsdat import AbstractFileHandler
 
 
-# TODO – Developer: Write your FileHandler and add documentation
 class CustomFileHandler(AbstractFileHandler):
     """--------------------------------------------------------------------------------
     Custom file handler for reading <some data type> files from a <instrument name>.

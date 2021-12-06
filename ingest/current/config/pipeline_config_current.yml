@@ -1,4 +1,3 @@
-# TODO – Developer: Fill out this file. You can find the official documentation at
 # https://github.com/tsdat/tsdat/blob/main/examples/templates/ingest_pipeline_template.yml
 # or open an existing example in this repository to see what you can do here. Note that
 # the some projects may use slightly different metadata conventions and requirements
@@ -131,24 +130,24 @@ dataset_definition:
 #-----------------------------------------------------------------
 quality_management:
   #---------------------------------------------------------------
-  # manage_missing_coordinates:
-  #   checker:
-  #     classname: tsdat.qc.checkers.CheckMissing
-  #   handlers:
-  #     - classname: tsdat.qc.handlers.FailPipeline
-  #   variables:
-  #     - COORDS
+  manage_missing_coordinates:
+    checker:
+      classname: tsdat.qc.checkers.CheckMissing
+    handlers:
+      - classname: tsdat.qc.handlers.FailPipeline
+    variables:
+      - time
 
-  # manage_coordinate_monotonicity:
-  #   checker:
-  #     classname: tsdat.qc.checkers.CheckMonotonic
-  #   handlers:
-  #     - classname: tsdat.qc.handlers.SortDatasetByCoordinate
-  #       parameters:
-  #         ascending: True
-  #         correction: "Coordinate data was sorted in order to ensure monotonicity."
-  #   variables:
-  #     - COORDS
+  manage_coordinate_monotonicity:
+    checker:
+      classname: tsdat.qc.checkers.CheckMonotonic
+    handlers:
+      - classname: tsdat.qc.handlers.SortDatasetByCoordinate
+        parameters:
+          ascending: True
+          correction: "Coordinate data was sorted in order to ensure monotonicity."
+    variables:
+      - time
 
   #---------------------------------------------------------------
   manage_missing_values:
