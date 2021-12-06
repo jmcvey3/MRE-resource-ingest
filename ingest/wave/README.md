@@ -1,8 +1,7 @@
 # Spotter_Buoy at MCRL
 
-Wave data taken in Clallam Bay over a month-long deployment in Aug-Sep 2020
-
-<!-- # TODO – Developer: Add more to the ingest description here -->
+Tsdat example ingest of raw data downloaded from a [Spotter wave buoy](https://www.sofarocean.com/products/spotter),
+specifically files with the file pattern "####_FLT.csv" (the accelerometer/GPS data).
 
 Written by [James McVey](mailto:james.mcvey@pnnl.gov)
 

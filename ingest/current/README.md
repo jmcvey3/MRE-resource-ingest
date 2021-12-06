@@ -1,10 +1,14 @@
 # Water Current at MCRL
 
-Velocity data from ADCP deployed on a lander in the inlet to Sequim Bay
+TSDAT example ingest of raw ACDP data. 
+Data is a clipping of a single ebb and flood tide from a 13 day deployment of a 
+Nortek Signature 1000 in the inlet to Sequim Bay, part of a study on acoustic interference. 
+Ingest requires the [dolfyn](https://github.com/jmcvey3/dolfyn) python package currently in development.
 
-<!-- # TODO – Developer: Add more to the ingest description here -->
+McVey J.R., and R.J. Cavagnaro. 2020. "ADCP Interference Raw Data." PNNL-SA-156985.
 
-Written by [James McVey](mailto:james.mcvey@pnnl.gov)
+Corresponding dev: [James McVey](mailto:james.mcvey@pnnl.gov)
+
 
 ## Ingest Organization
 
