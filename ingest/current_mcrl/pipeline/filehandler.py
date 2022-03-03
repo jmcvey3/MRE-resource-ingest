@@ -1,7 +1,7 @@
 import xarray as xr
 
 import dolfyn as dlfn
-import dolfyn.adp.api as api
+from dolfyn.adp import api
 from tsdat import AbstractFileHandler
 
 
@@ -33,18 +33,13 @@ class AdcpUpHandler(AbstractFileHandler):
         api.clean.find_surface_from_P(ds, salinity=s)
         ds = api.clean.nan_beyond_surface(ds)
 
-        # Set declination (already in earth coordinates, so fixes in place)
-        declin = self.parameters["magn_declination"]
-        dlfn.set_declination(ds, declin)
-
+        # Clean out low correlation data
         thresh = self.parameters["corr_threshold"]
         ds = api.clean.correlation_filter(ds, thresh=thresh)
 
-        # Clarify this coord
-        ds["inst*"] = ds["x*"].rename("inst*")
-        ds["beam2inst_orientmat"] = ds.beam2inst_orientmat.assign_coords(
-            {"x*": ["X", "Y", "Z1", "Z2"]}
-        )
+        # Set declination (already in earth coordinates, so fixes in place)
+        declin = self.parameters["magn_declination"]
+        dlfn.set_declination(ds, declin)
 
         # Velocity magnitude and direction in degrees from N
         ds["U_mag"] = ds.velds.U_mag
@@ -56,7 +51,9 @@ class AdcpUpHandler(AbstractFileHandler):
             if "config" in key:
                 ds.attrs.pop(key)
 
-        return ds
+        # Fix x* coordinate
+        ds.coords["inst*"] = ("x*", ["X", "Y", "Z1", "Z2"])
+        return ds.swap_dims({"x*": "inst*"})
 
 
 class AdcpDownHandler(AbstractFileHandler):

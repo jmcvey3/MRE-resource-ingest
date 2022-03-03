@@ -12,10 +12,6 @@ if __name__ == "__main__":
     )
 
     os.chdir("ingest/current_mcrl")
-    files = glob(os.path.join("data", "lander", "*_sea_spider.ad2cp"))
+    files = glob(os.path.join("data", "*.ad2cp"))
     for fname in files:
         pipeline.run(expand(fname, __file__))
-
-    # files = glob(os.path.join("data", "vessel", "*UTC.ad2cp"))
-    # for fname in files:
-    #     pipeline.run(expand(fname, __file__))

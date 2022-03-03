@@ -1,7 +1,4 @@
 storage:
-  # This section should not be modified unless there is a strong need. Please contact
-  # the repository maintainers if you feel you need to use different settings here –
-  # there may be another way to accomplish what you need.
   classname: ${STORAGE_CLASSNAME}
   parameters:
     retain_input_files: ${RETAIN_INPUT_FILES}
@@ -28,9 +25,6 @@ storage:
           magn_declination: 15.8
           corr_threshold: 50
 
-    # The output section should not be modified unless there is a strong need. Please
-    # contact the repository maintainers if you feel you need to write to a different
-    # format.
     output:
       netcdf:
         file_extension: ".nc"

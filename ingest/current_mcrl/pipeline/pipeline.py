@@ -1,13 +1,10 @@
-import os
-import cmocean
-import numpy as np
 import pandas as pd
 import xarray as xr
 import matplotlib.pyplot as plt
 
 from typing import Dict
 from tsdat import DSUtil
-from utils import IngestPipeline, format_time_xticks
+from utils import IngestPipeline
 
 
 class Pipeline(IngestPipeline):
