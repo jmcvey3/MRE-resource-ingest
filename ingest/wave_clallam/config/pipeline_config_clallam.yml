@@ -8,15 +8,15 @@ pipeline:
 
   # These parameters will be used to name files.
   location_id: "clallam"
-  dataset_name: "spotter_buoy"
-  # qualifier: ""
+  dataset_name: "wave_buoy"
+  qualifier: "motion"
   # temporal: ""
   data_level: "b1" # If not applying QC this should be set to "a1"
 
 dataset_definition:
   attributes:
     title: "Spotter_Buoy"
-    description: "Wave data taken in Clallam Bay over a month-long deployment in Aug-Sep 2020"
+    description: "Wave data taken with a Spotter buoy in Clallam Bay, WA over a month-long deployment in Aug-Sep 2020"
     conventions: MHKiT-Cloud Data Standards v. 1.0
     institution: Pacific Northwest National Laboratory
     code_url: https://github.com/tsdat/ingest-template
@@ -66,6 +66,7 @@ dataset_definition:
         comment: "Translation motion as measured by the buoy" # User-friendly description of the property.
         units: "m"
         valid_range: [-3, 3]
+
 #-----------------------------------------------------------------
 quality_management:
   #---------------------------------------------------------------
@@ -105,11 +106,11 @@ quality_management:
 
   despiking: # Rename this
     checker:
-      classname: ingest.wave.pipeline.qc.GoringNikora2002
+      classname: ingest.wave_clallam.pipeline.qc.GoringNikora2002
       parameters:
         n_points: 1000
     handlers:
-      - classname: ingest.wave.pipeline.qc.CubicSplineInterp
+      - classname: ingest.wave_clallam.pipeline.qc.CubicSplineInterp
       - classname: tsdat.qc.handlers.RecordQualityResults
         parameters:
           bit: 4

@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import xarray as xr
-
+import warnings
 from tsdat import AbstractFileHandler
 
 
@@ -25,7 +25,12 @@ class SpotterFileHandler(AbstractFileHandler):
             xr.Dataset: An xr.Dataset object
         ----------------------------------------------------------------------------"""
         # Units are converted to m through config file
-        df = pd.read_csv(filename, delimiter=",", index_col=False)
+
+        with warnings.catch_warnings():
+            # Ignore pandas ParserWarning
+            warnings.simplefilter("ignore")
+            df = pd.read_csv(filename, delimiter=",", index_col=False)
+
         ds = xr.Dataset(
             data_vars={
                 "displacement": (

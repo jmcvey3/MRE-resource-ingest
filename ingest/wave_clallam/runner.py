@@ -12,7 +12,7 @@ if __name__ == "__main__":
         expand("config/storage_config_clallam.yml", __file__),
     )
 
-    os.chdir("ingest/wave")
+    os.chdir("ingest/wave_clallam")
     files = glob(os.path.join("data", "xyz", "*_FLT.CSV"))
     for fname in files:
         pipeline.run(expand(fname, __file__))

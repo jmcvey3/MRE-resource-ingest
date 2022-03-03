@@ -12,7 +12,7 @@ storage:
     input:
       csv:
         file_pattern: ".*.CSV"
-        classname: ingest.wave.pipeline.filehandler.SpotterFileHandler
+        classname: ingest.wave_clallam.pipeline.filehandler.SpotterFileHandler
       netcdf:
         file_pattern: ".*.nc"
         classname: tsdat.io.filehandlers.NetCdfHandler
