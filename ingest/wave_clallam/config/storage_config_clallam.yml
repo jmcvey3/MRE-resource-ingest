@@ -10,9 +10,12 @@ storage:
 
   file_handlers:
     input:
-      csv:
-        file_pattern: ".*.CSV"
-        classname: ingest.wave_clallam.pipeline.filehandler.SpotterFileHandler
+      wave_motion:
+        file_pattern: ".*_FLT.CSV"
+        classname: ingest.wave_clallam.pipeline.filehandler.SpotterFltFileHandler
+      gps:
+        file_pattern: ".*_LOC.CSV"
+        classname: ingest.wave_clallam.pipeline.filehandler.SpotterLocFileHandler
       netcdf:
         file_pattern: ".*.nc"
         classname: tsdat.io.filehandlers.NetCdfHandler

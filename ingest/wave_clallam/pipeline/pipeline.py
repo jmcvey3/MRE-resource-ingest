@@ -112,6 +112,11 @@ class Pipeline(IngestPipeline):
             dataset (xr.Dataset):   The xarray dataset with customizations and
                                     QC applied.
         -------------------------------------------------------------------"""
+        # Only plot wave motion data
+        qualifier = self.config.pipeline_definition.qualifier
+        if "motion" not in qualifier:
+            return
+
         style_file = os.path.join(os.path.dirname(__file__), "styling.mplstyle")
         ds = dataset
 
@@ -128,7 +133,7 @@ class Pipeline(IngestPipeline):
                 ax.legend(ncol=2, bbox_to_anchor=(1, -0.05))
                 ax.set_ylabel("Disp [m]")
                 ax.set_xlabel("Time [UTC]")
-                format_time_xticks(ax)
+                format_time_xticks(ax, date_format="%Y-%m-%d %H:%M")
                 plt.legend()
 
                 fig.savefig(tmp_path)
