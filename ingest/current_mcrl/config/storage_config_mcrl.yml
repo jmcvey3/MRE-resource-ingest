@@ -25,13 +25,16 @@ storage:
           magn_declination: 15.8
           corr_threshold: 50
 
+      netcdf:
+        file_pattern: ".*.nc"
+        classname: tsdat.io.filehandlers.NetCdfHandler
+
     output:
       netcdf:
         file_extension: ".nc"
-        # classname: tsdat.io.filehandlers.NetCdfHandler
-
         classname: tsdat.io.filehandlers.netcdf_handler.SplitNetCDFHandler
         parameters:
           write:
+            compression: True
             time_interval: 1
             time_unit: "D"
