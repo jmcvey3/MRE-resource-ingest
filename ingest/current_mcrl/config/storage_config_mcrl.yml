@@ -28,4 +28,10 @@ storage:
     output:
       netcdf:
         file_extension: ".nc"
-        classname: tsdat.io.filehandlers.NetCdfHandler
+        # classname: tsdat.io.filehandlers.NetCdfHandler
+
+        classname: tsdat.io.filehandlers.netcdf_handler.SplitNetCDFHandler
+        parameters:
+          write:
+            time_interval: 1
+            time_unit: "D"

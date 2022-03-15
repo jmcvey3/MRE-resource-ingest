@@ -1,5 +1,4 @@
 import xarray as xr
-
 import dolfyn as dlfn
 from dolfyn.adp import api
 from tsdat import AbstractFileHandler
@@ -7,7 +6,7 @@ from tsdat import AbstractFileHandler
 
 class AdcpUpHandler(AbstractFileHandler):
     """-------------------------------------------------------------------
-    Custom file handler for reading *.wpr files.
+    Custom file handler for reading ADCP binary files.
     -------------------------------------------------------------------"""
 
     def read(self, filename: str, **kwargs) -> xr.Dataset:
@@ -58,7 +57,7 @@ class AdcpUpHandler(AbstractFileHandler):
 
 class AdcpDownHandler(AbstractFileHandler):
     """-------------------------------------------------------------------
-    Custom file handler for reading *.wpr files.
+    Custom file handler for reading ADCP binary files.
     -------------------------------------------------------------------"""
 
     def read(self, filename: str, **kwargs) -> xr.Dataset:
