@@ -1,17 +1,17 @@
-import os
+import pandas as pd
 import xarray as xr
 import matplotlib.pyplot as plt
 
 from typing import Dict
 from tsdat import DSUtil
-from utils import IngestPipeline, format_time_xticks
+from utils import IngestPipeline
 
 
 class Pipeline(IngestPipeline):
     """--------------------------------------------------------------------------------
-    SPOTTER_BUOY INGESTION PIPELINE
+    SEQUIM_CURRENT INGESTION PIPELINE
 
-    Wave data taken in Clallam Bay over a month-long deployment in Aug-Sep 2021
+    Velocity data from ADCP deployed on a lander in the inlet to Sequim Bay
 
     --------------------------------------------------------------------------------"""
 
@@ -112,30 +112,98 @@ class Pipeline(IngestPipeline):
             dataset (xr.Dataset):   The xarray dataset with customizations and
                                     QC applied.
         -------------------------------------------------------------------"""
-        # Only plot wave motion data
-        qualifier = self.config.pipeline_definition.qualifier
-        if "motion" not in qualifier:
-            return
 
-        style_file = os.path.join(os.path.dirname(__file__), "styling.mplstyle")
+        def add_colorbar(ax, plot, label):
+            cb = plt.colorbar(plot, ax=ax, pad=0.01)
+            cb.ax.set_ylabel(label, fontsize=12)
+            cb.outline.set_linewidth(1)
+            cb.ax.tick_params(size=0)
+            cb.ax.minorticks_off()
+            return cb
+
         ds = dataset
+        date = pd.to_datetime(ds.time.values)
 
-        with plt.style.context(style_file):
-            filename = DSUtil.get_plot_filename(dataset, "buoy_displacement", "png")
-            with self.storage._tmp.get_temp_filepath(filename) as tmp_path:
-                fig, ax = plt.subplots()
+        filename = DSUtil.get_plot_filename(dataset, "h_vel", "png")
+        with self.storage._tmp.get_temp_filepath(filename) as tmp_path:
 
-                ax.plot(ds.time, ds.displacement.sel(dir="x"), label="x-direction")
-                ax.plot(ds.time, ds.displacement.sel(dir="y"), label="y-direction")
-                ax.plot(ds.time, ds.displacement.sel(dir="z"), label="z-direction")
+            # Create the figure and axes objects
+            fig, ax = plt.subplots(
+                nrows=2, ncols=1, figsize=(14, 8), constrained_layout=True
+            )
 
-                ax.set_title("")  # Remove bogus title created by xarray
-                ax.legend(ncol=2, bbox_to_anchor=(1, -0.05))
-                ax.set_ylabel("Buoy Displacement [m]")
-                ax.set_xlabel("Time [UTC]")
-                #format_time_xticks(ax, date_format="%Y-%m-%d %H:%M")
-                plt.legend()
+            magn = ax[0].pcolormesh(
+                date, -ds["range"], ds["current_speed"], cmap="Blues", shading="nearest"
+            )
+            ax[0].set_xlabel("Time (UTC)")
+            ax[0].set_ylabel(r"Range [m]")
+            ax[0].set_ylim([-10, 0])
+            add_colorbar(ax[0], magn, r"Speed [m/s]")
+            magn.set_clim(0, 2.5)
 
-                fig.savefig(tmp_path)
-                self.storage.save(tmp_path)
-                plt.close(fig)
+            dirc = ax[1].pcolormesh(
+                date,
+                -ds["range"],
+                ds["current_direction"],
+                cmap="twilight",
+                shading="nearest",
+            )
+            ax[1].set_xlabel("Time (UTC)")
+            ax[1].set_ylabel(r"Range [m]")
+            ax[1].set_ylim([-10, 0])
+            add_colorbar(ax[1], dirc, r"Direction [deg from N]")
+
+            # Save the figure
+            fig.savefig(tmp_path, dpi=100)
+            self.storage.save(tmp_path)
+            plt.close()
+
+        # filename = DSUtil.get_plot_filename(dataset, "amplitude", "png")
+        # with self.storage._tmp.get_temp_filepath(filename) as tmp_path:
+
+        #     # Create the figure and axes objects
+        #     fig, ax = plt.subplots(
+        #         nrows=ds.n_beams, ncols=1, figsize=(14, 8), constrained_layout=True
+        #     )
+
+        #     for beam in range(ds.n_beams):
+        #         amp = ax[beam].pcolormesh(
+        #             date, ds.range, ds.amplitude[beam], shading="nearest"
+        #         )
+        #         ax[beam].set_title("Beam " + str(beam + 1))
+        #         ax[beam].set_xlabel("Time (UTC)")
+        #         ax[beam].set_ylabel(r"Range [m]")
+        #         ax[beam].set_ylim([0, 11])
+        #         add_colorbar(ax[beam], amp, "Ampliude [dB]")
+
+        #     # Save the figure
+        #     fig.savefig(tmp_path, dpi=100)
+        #     self.storage.save(tmp_path)
+        #     plt.close()
+
+        # filename = DSUtil.get_plot_filename(dataset, "correlation", "png")
+        # with self.storage._tmp.get_temp_filepath(filename) as tmp_path:
+
+        #     # Create the figure and axes objects
+        #     fig, ax = plt.subplots(
+        #         nrows=ds.n_beams, ncols=1, figsize=(14, 8), constrained_layout=True
+        #     )
+
+        #     for beam in range(ds.n_beams):
+        #         amp = ax[beam].pcolormesh(
+        #             date,
+        #             ds.range,
+        #             ds.correlation[beam],
+        #             cmap="copper",
+        #             shading="nearest",
+        #         )
+        #         ax[beam].set_title("Beam " + str(beam + 1))
+        #         ax[beam].set_xlabel("Time (UTC)")
+        #         ax[beam].set_ylabel(r"Range [m]")
+        #         ax[beam].set_ylim([0, 11])
+        #         add_colorbar(ax[beam], amp, "Correlation [%]")
+
+        #     # Save the figure
+        #     fig.savefig(tmp_path, dpi=100)
+        #     self.storage.save(tmp_path)
+        #     plt.close()

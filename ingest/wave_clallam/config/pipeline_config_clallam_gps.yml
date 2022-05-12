@@ -6,7 +6,7 @@ pipeline:
   dataset_name: "wave_buoy"
   qualifier: "gps"
   temporal: "400ms"
-  data_level: "b1" # If not applying QC this should be set to "a1"
+  data_level: "a1"
 
 dataset_definition:
   attributes:

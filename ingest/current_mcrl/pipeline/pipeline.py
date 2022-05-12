@@ -124,7 +124,7 @@ class Pipeline(IngestPipeline):
         ds = dataset
         date = pd.to_datetime(ds.time.values)
 
-        filename = DSUtil.get_plot_filename(dataset, "h_vel", "png")
+        filename = DSUtil.get_plot_filename(dataset, "current", "png")
         with self.storage._tmp.get_temp_filepath(filename) as tmp_path:
 
             # Create the figure and axes objects

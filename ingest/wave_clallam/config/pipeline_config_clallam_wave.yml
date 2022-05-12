@@ -6,7 +6,7 @@ pipeline:
   dataset_name: "wave_buoy"
   qualifier: "motion"
   temporal: "400ms"
-  data_level: "b1" # If not applying QC this should be set to "a1"
+  data_level: "a1"
 
 dataset_definition:
   attributes:
@@ -57,7 +57,7 @@ dataset_definition:
         # a very common dimension, sometimes `height`, too.
       type: float # The data type, typically one of: `float`, `long`, `int`
       attrs:
-        long_name: buoy_displacement # Label used by Xarray and other libraries for plotting
+        long_name: Buoy Displacement # Label used by Xarray and other libraries for plotting
         comment: "Translation motion as measured by the buoy" # User-friendly description of the property.
         units: "m"
         valid_range: [-3, 3]
@@ -69,6 +69,7 @@ dataset_definition:
       dims: [time]
       type: float
       attrs:
+        long_name: Time Elapsed
         comment: "Elapsed time since last computer restart"
         units: "s"
 

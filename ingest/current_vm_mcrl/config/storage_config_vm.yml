@@ -7,12 +7,12 @@ storage:
 
   file_handlers:
     input:
-      lander:
-        file_pattern: ".*_sea_spider.ad2cp"
-        classname: ingest.current_mcrl.pipeline.filehandler.AdcpUpHandler
+      vessel:
+        file_pattern: ".*_Desdemona.ad2cp"
+        classname: ingest.current_vm_mcrl.pipeline.filehandler.AdcpDownHandler
         parameters:
-          depth: 0.6
-          salinity: 31
+          depth: 0.5
+          amp_threshold: 40
           magn_declination: 15.8
           corr_threshold: 50
 
@@ -23,7 +23,7 @@ storage:
     output:
       netcdf:
         file_extension: ".nc"
-        classname: ingest.current_mcrl.pipeline.filehandler.SplitNetCdfHandler #tsdat.io.filehandlers.netcdf_handler.SplitNetCDFHandler
+        classname: tsdat.io.filehandlers.netcdf_handler.SplitNetCDFHandler
         parameters:
           write:
             compression: True
